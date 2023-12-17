@@ -3,15 +3,13 @@ package org.example.client;
 import org.example.server.Server;
 
 public class Client {
-    private CView cview;
-    private Server server;
-    private String text;
+    private final ClientView clientView;
+    private final Server server;
     public boolean isLogin;
     public boolean wasAdded = false;
-    public final String LOGFILE_PATH = "log.txt";
 
-    public Client(CView cview, Server server){
-        this.cview = cview;
+    public Client(ClientView clientView, Server server){
+        this.clientView = clientView;
         this.server = server;
     }
 
@@ -22,26 +20,26 @@ public class Client {
     public void login () {
         if (server.isServerWorking()) {
             isLogin = true;
-            cview.setConnectedView();
-            //readFile(client.LOGFILE_PATH);
-            server.processMessage(cview.getName() + " подключился к беседе\n");
+            clientView.setConnectedView();
+            clientView.printMessage(server.loadLogHistory());
+            server.processMessage(">>> " + clientView.getName() + " подключился к беседе\n");
             if (!wasAdded) {
-                server.addClient((ClientGUI) cview);
+                server.addClient(clientView);
                 wasAdded = true;
             }
         } else {
-            cview.setDisconnectedView();
+            clientView.setDisconnectedView();
         }
     }
 
     public void send () {
         if (isLogin && server.isServerWorking()) {
-            text = cview.getText();
+            String text = clientView.getText();
             if (!text.isEmpty()) {
-                sendMessage(cview.getName() + ": " + text + "\n");
+                sendMessage(clientView.getName() + ": " + text + "\n");
             }
         } else {
-            cview.setDisconnectedView();
+            clientView.setDisconnectedView();
             isLogin = false;
         }
     }

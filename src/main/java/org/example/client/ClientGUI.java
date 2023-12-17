@@ -6,13 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
-public class ClientGUI extends JFrame implements CView {
-    private Client client;
-    private Server server;
+public class ClientGUI extends JFrame implements ClientView {
+    private final Client client;
     private static final int WIDTH = 400;
     private static final int HEIGHT = 300;
     private final JTextArea log = new JTextArea();
@@ -27,7 +23,6 @@ public class ClientGUI extends JFrame implements CView {
     private final JButton btnSend = new JButton("Send");
 
     public ClientGUI(Server server) {
-        this.server = server;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -73,6 +68,7 @@ public class ClientGUI extends JFrame implements CView {
         log.append(text);
     }
 
+    @Override
     public void setConnectedView() {
         setTitle("Client: " + tfLogin.getText());
         panelTop.setVisible(false);
@@ -97,15 +93,4 @@ public class ClientGUI extends JFrame implements CView {
         return tfMessage.getText();
     }
 
-    public void readFile(String filename) {
-        try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String text;
-            while ((text = br.readLine()) != null) {
-                log.append(text + "\n");
-            }
-        }
-        catch(IOException ex) {
-            log.append("История сообщений не загружена!");
-        }
-    }
 }
