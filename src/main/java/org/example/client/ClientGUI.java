@@ -58,7 +58,8 @@ public class ClientGUI extends JFrame implements ClientView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 client.send();
-                tfMessage.setText("");
+                if (client.isLogin())
+                    tfMessage.setText("");
             }
         });
     }

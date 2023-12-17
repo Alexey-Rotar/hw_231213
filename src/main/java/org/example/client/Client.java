@@ -5,8 +5,8 @@ import org.example.server.Server;
 public class Client {
     private final ClientView clientView;
     private final Server server;
-    public boolean isLogin;
-    public boolean wasAdded = false;
+    private boolean isLogin;
+    private boolean wasAdded = false;
 
     public Client(ClientView clientView, Server server){
         this.clientView = clientView;
@@ -17,7 +17,11 @@ public class Client {
         server.processMessage(text);
     }
 
-    public void login () {
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void login() {
         if (server.isServerWorking()) {
             isLogin = true;
             clientView.setConnectedView();
@@ -32,7 +36,7 @@ public class Client {
         }
     }
 
-    public void send () {
+    public void send() {
         if (isLogin && server.isServerWorking()) {
             String text = clientView.getText();
             if (!text.isEmpty()) {
